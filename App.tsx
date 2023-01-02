@@ -1,10 +1,12 @@
-import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
-import { Text } from './src/components/Text';
 import { ThemeProvider } from 'styled-components';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 
 import theme from './src/global/styles/theme';
+import { Main } from './src/Main';
+import { CartProvider } from './src/context/useCart';
 
 export default function App() {
   const [fonstLoaded] = useFonts({
@@ -19,10 +21,11 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Hello NAWaiter APP</Text>
-      </View>
-      <StatusBar style="dark" />
+      <CartProvider>
+        <Main />
+
+        <StatusBar style="dark" />
+      </CartProvider>
     </ThemeProvider>
   );
 }

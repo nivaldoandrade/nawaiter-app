@@ -9,7 +9,7 @@ interface TextProps {
 
 export const Text = styled.Text<TextProps>`
   font-family: ${({ weight, theme }) =>
-    weight ? `GS-${weight}` : theme.fonts['GS-400']};
+    weight ? theme.fonts[`GS-${weight}`] : theme.fonts['GS-400']};
   color: ${({ color, theme }) => color || theme.colors.gray[500]};
   font-size: ${({ size }) => (size ? `${size}px` : '16px')};
   opacity: ${({ opacity }) => opacity || 1};
