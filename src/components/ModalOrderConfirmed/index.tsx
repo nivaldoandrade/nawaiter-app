@@ -1,8 +1,10 @@
 import { Modal } from 'react-native';
-import theme from '../../global/styles/theme';
+
 import { Button } from '../Button';
 import { CheckCircle } from '../Icons/CheckCircle';
 import { Text } from '../Text';
+
+import theme from '../../global/styles/theme';
 
 import { Container } from './styles';
 

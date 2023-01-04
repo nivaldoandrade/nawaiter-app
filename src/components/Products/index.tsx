@@ -1,32 +1,35 @@
+import { useState } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 
-import { Text } from '../Text';
+import { useCart } from '../../context/useCart';
 
-import { products } from '../../mocks/products';
+import { Product } from '../../types/Product';
+
+import { PlusCircle } from '../Icons/PlusCircle';
+import { ModalProduct } from '../ModalProduct';
+import { Text } from '../Text';
 
 import theme from '../../global/styles/theme';
 
-import { PlusCircle } from '../Icons/PlusCircle';
-
 import {
+  AddProductToCartButton,
   ProductContainer,
-  ProductImage,
   ProductDetails,
-  Separator,
-  AddProductToCartButton
+  ProductImage,
+  Separator
 } from './styles';
-import { formatPrice } from '../../utils/formaPrice';
-import { ModalProduct } from '../ModalProduct';
-import { useCallback, useState } from 'react';
-import { Product } from '../../types/Product';
-import { useCart } from '../../context/useCart';
 
 interface ProductsProps {
+  products: Product[];
   selectedTable: string;
   onOpenModalTable: () => void;
 }
 
-export function Products({ selectedTable, onOpenModalTable }: ProductsProps) {
+export function Products({
+  products,
+  selectedTable,
+  onOpenModalTable
+}: ProductsProps) {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<null | Product>(null);
 
@@ -56,7 +59,9 @@ export function Products({ selectedTable, onOpenModalTable }: ProductsProps) {
     return (
       <ProductContainer onPress={() => handleOpenModal(product)}>
         <ProductImage
-          source={{ uri: 'https://source.unsplash.com/random/?pizza' }}
+          source={{
+            uri: product.uriImg
+          }}
         />
         <ProductDetails>
           <Text weight="600">{product.name}</Text>
@@ -64,7 +69,7 @@ export function Products({ selectedTable, onOpenModalTable }: ProductsProps) {
             {product.description}
           </Text>
           <Text size={14} weight="600">
-            {formatPrice(product.price)}
+            {product.priceformatted}
           </Text>
         </ProductDetails>
 

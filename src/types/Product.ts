@@ -3,7 +3,9 @@ export interface Product {
   name: string;
   description: string;
   imagePath: string;
+  uriImg: string;
   price: number;
+  priceformatted: string;
   ingredients: Ingredient[];
 }
 

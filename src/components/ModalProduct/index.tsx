@@ -1,21 +1,22 @@
 import { FlatList, ListRenderItem, Modal } from 'react-native';
-import { useCart } from '../../context/useCart';
-import theme from '../../global/styles/theme';
-import { Product, Ingredient } from '../../types/Product';
-import { formatPrice } from '../../utils/formaPrice';
+
+import { Ingredient, Product } from '../../types/Product';
+
 import { Button } from '../Button';
 import { Close } from '../Icons/Close';
 import { Text } from '../Text';
 
+import theme from '../../global/styles/theme';
+
 import {
-  Container,
-  ImageContainer,
   CloseButton,
-  Header,
-  IngredientContainer,
-  IngredientContent,
+  Container,
   Footer,
   FooterContainer,
+  Header,
+  ImageContainer,
+  IngredientContainer,
+  IngredientContent,
   PriceContainer
 } from './styles';
 
@@ -65,7 +66,9 @@ export function ModalProduct({
     >
       <Container>
         <ImageContainer
-          source={{ uri: 'https://source.unsplash.com/random/?pizza' }}
+          source={{
+            uri: product.uriImg
+          }}
         >
           <CloseButton onPress={onClose}>
             <Close />
@@ -102,7 +105,7 @@ export function ModalProduct({
           <PriceContainer>
             <Text color={theme.colors.gray[400]}>Preço</Text>
             <Text size={20} weight="600">
-              {formatPrice(product.price)}
+              {product.priceformatted}
             </Text>
           </PriceContainer>
           <Button onPress={() => handleAddProduct(product)}>

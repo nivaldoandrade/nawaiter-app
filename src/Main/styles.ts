@@ -1,5 +1,5 @@
-import styled from 'styled-components/native';
 import { Platform, StatusBar } from 'react-native';
+import styled from 'styled-components/native';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -20,9 +20,16 @@ export const CategoriesContainer = styled.View`
 export const ProductsContainer = styled.View`
   flex: 1;
 `;
-export const Footer = styled.View`
-  min-height: 110px;
+export const Footer = styled.SafeAreaView`
+  /* min-height: 110px; */
   background-color: ${({ theme }) => theme.colors.background};
+`;
+export const FooterContainer = styled.View`
   padding: 16px 24px;
 `;
-export const FooterContainer = styled.SafeAreaView``;
+
+export const CenteredContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;

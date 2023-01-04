@@ -1,15 +1,15 @@
+import { useEffect, useState } from 'react';
 import { Modal, Platform, TouchableOpacity } from 'react-native';
 
-import { Text } from '../Text';
-import { Button } from '../Button';
+import { useCart } from '../../context/useCart';
 
+import { Button } from '../Button';
 import { Close } from '../Icons/Close';
+import { Text } from '../Text';
 
 import theme from '../../global/styles/theme';
 
-import { Overlay, ModalBody, Header, Form, InputTable } from './styles';
-import { useEffect, useState } from 'react';
-import { useCart } from '../../context/useCart';
+import { Form, Header, InputTable, ModalBody, Overlay } from './styles';
 
 interface ModalTableProps {
   selectedTable: string;

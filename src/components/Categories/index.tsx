@@ -1,16 +1,28 @@
 import { useState } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
-import { Text } from '../Text';
 
-import { categories } from '../../mocks/categories';
+import { ICategory } from '../../types/Category';
+
+import { Text } from '../Text';
 
 import { Container, Icon } from './styles';
 
-export function Categories() {
+interface CategoriesProps {
+  categories: ICategory[];
+  onSelectedCategory: (categoryId: string) => Promise<void>;
+}
+
+export function Categories({
+  categories,
+  onSelectedCategory
+}: CategoriesProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   function handleSelectCategory(categoryId: string) {
-    setSelectedCategory((state) => (state === categoryId ? '' : categoryId));
+    const category = selectedCategory === categoryId ? '' : categoryId;
+
+    setSelectedCategory(category);
+    onSelectedCategory(category);
   }
 
   const renderCategory: ListRenderItem<typeof categories[number]> = ({

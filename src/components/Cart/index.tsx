@@ -1,40 +1,65 @@
 import { useState } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
+import { ActivityIndicator, FlatList, ListRenderItem } from 'react-native';
+
 import { useCart } from '../../context/useCart';
-import theme from '../../global/styles/theme';
+
+import api from '../../services/api';
+
 import { ICartItem } from '../../types/Cart';
-import { formatPrice } from '../../utils/formaPrice';
+
 import { Button } from '../Button';
 import { MinusCircle } from '../Icons/MinusCircle';
 import { PlusCircle } from '../Icons/PlusCircle';
 import { ModalOrderConfirmed } from '../ModalOrderConfirmed';
 import { Text } from '../Text';
 
+import theme from '../../global/styles/theme';
+
 import {
-  Container,
-  ProductContainer,
-  Image,
-  Quantity,
-  ProductDetails,
-  Actions,
   ActionButton,
+  Actions,
+  Container,
   FooterCart,
+  Image,
+  ProductContainer,
+  ProductDetails,
+  Quantity,
   Total
 } from './styles';
 
 interface CartProps {
-  cartItems: ICartItem[];
+  selectedTable?: string;
   onResetOrder: () => void;
 }
 [];
 
-export function Cart({ cartItems, onResetOrder }: CartProps) {
+export function Cart({ selectedTable, onResetOrder }: CartProps) {
   const [isVisibleModalOrderConfirmed, setisVisibleModalOrderConfirmed] =
     useState(false);
-  const { updatedQuantityProduct, subTotalProduct, total } = useCart();
+  const [isLoadingConfirmOrder, setIsLoadingConfirmOrder] = useState(false);
 
-  function handleOpenModalOrderConfirmed() {
-    setisVisibleModalOrderConfirmed(true);
+  const { cart, updatedQuantityProduct, subTotalProduct, total } = useCart();
+
+  async function handleConfirmOrder() {
+    setIsLoadingConfirmOrder(true);
+    const cartProductFormatted = cart.map((item) => ({
+      product: item.product._id,
+      quantity: item.quantity
+    }));
+
+    const payload = {
+      table: selectedTable,
+      products: cartProductFormatted
+    };
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    api
+      .post('/orders', payload)
+      .then(() => {
+        setisVisibleModalOrderConfirmed(true);
+      })
+      .finally(() => setIsLoadingConfirmOrder(false));
   }
 
   function handleCloseModalOrderConfirmed() {
@@ -49,7 +74,11 @@ export function Cart({ cartItems, onResetOrder }: CartProps) {
   const renderItem: ListRenderItem<ICartItem> = ({ item }) => {
     return (
       <ProductContainer>
-        <Image source={{ uri: 'https://source.unsplash.com/random/?pizza' }} />
+        <Image
+          source={{
+            uri: item.product.uriImg
+          }}
+        />
         <Quantity>
           <Text size={14} color={theme.colors.gray[400]}>
             {item.quantity}x
@@ -92,13 +121,13 @@ export function Cart({ cartItems, onResetOrder }: CartProps) {
       <FlatList
         showsVerticalScrollIndicator={false}
         style={{ maxHeight: 120 }}
-        data={cartItems}
+        data={cart}
         keyExtractor={({ product }) => product._id}
         renderItem={renderItem}
       />
       <FooterCart>
         <Total>
-          {cartItems.length > 0 ? (
+          {cart.length > 0 ? (
             <>
               <Text color={theme.colors.gray[400]}>Total</Text>
               <Text size={20} weight="600">
@@ -112,12 +141,16 @@ export function Cart({ cartItems, onResetOrder }: CartProps) {
           )}
         </Total>
         <Button
-          onPress={handleOpenModalOrderConfirmed}
-          disabled={cartItems.length < 1}
+          onPress={handleConfirmOrder}
+          disabled={cart.length < 1 || isLoadingConfirmOrder}
         >
-          <Text weight="600" color={theme.colors.gray[0]}>
-            Confirmar Pedido
-          </Text>
+          {!isLoadingConfirmOrder ? (
+            <Text weight="600" color={theme.colors.gray[0]}>
+              Confirmar Pedido
+            </Text>
+          ) : (
+            <ActivityIndicator color={theme.colors.primary.main} />
+          )}
         </Button>
       </FooterCart>
 

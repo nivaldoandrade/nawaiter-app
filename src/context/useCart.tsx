@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
+
 import { ICartItem } from '../types/Cart';
 import { Product } from '../types/Product';
+
 import { formatPrice } from '../utils/formaPrice';
 
 interface ICartProviderProps {
